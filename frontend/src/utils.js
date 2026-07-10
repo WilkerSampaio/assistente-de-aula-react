@@ -96,9 +96,13 @@ export function gerarConteudoLocal(texto) {
   return { resumo, topicos: topics, perguntas: qas, fonte: 'local' };
 }
 
-// Chama o backend Python (FastAPI), apontando explicitamente para o localhost:8000
+// Chama o backend Python (FastAPI).
+// Ajustado para usar uma rota relativa, permitindo que funcione tanto em desenvolvimento (localhost) quanto em produção (Render).
 export async function chamarLLM(texto) {
-  const resp = await fetch('http://127.0.0.1:8000/api/gerar', {
+  // A rota relativa '/api/gerar' faz a requisição para o mesmo servidor que está servindo o frontend.
+  // Em desenvolvimento (local), se o proxy estiver configurado, ele será redirecionado para o localhost:8000.
+  // Em produção (Render), ele fará a requisição para o backend hospedado na mesma URL.
+  const resp = await fetch('/api/gerar', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ texto })
