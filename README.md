@@ -1,110 +1,208 @@
-# Assistente de Aula — React + Python (100% gratuito)
+### 🎓 Assistente de Aula Inteligente
 
-Versão do protótipo em **React** (frontend) com um backend em **Python
-(FastAPI)**, que chama uma LLM real e **gratuita** — a API da
-[Groq](https://console.groq.com), rodando o modelo aberto Llama 3.3 — para
-gerar resumo, tópicos e perguntas. Não precisa de cartão de crédito nem
-gastar nada.
+Um protótipo de assistente educacional de alta acessibilidade desenvolvido como trabalho prático para a disciplina de **Inteligência Artificial** do curso de **Sistemas de Informação (Período Noturno)**.
 
-Transcrição de fala (Speech-to-Text) e leitura em voz alta (Text-to-Speech)
-funcionam direto no navegador (Web Speech API), sem precisar do backend. Só a
-geração de resumo/tópicos/perguntas com IA real precisa do backend rodando —
-sem ele, o app cai sozinho no modo simulado local, para nunca travar uma
-apresentação.
+O objetivo principal do projeto é transcrever áudios de aulas em tempo real e, utilizando **Modelos de Linguagem de Grande Escala (LLMs)**, gerar automaticamente resumos estruturados, tópicos principais e questionários de revisão (Q&A) para otimizar os estudos dos alunos de forma inclusiva.
 
-## Estrutura
-```
-assistente-de-aula-react/
-├── backend/              → Python (FastAPI)
-│   ├── main.py
-│   ├── requirements.txt
-│   └── .env.example
-└── frontend/             → React (Vite)
-    ├── src/
-    │   ├── App.jsx
-    │   ├── main.jsx
-    │   ├── styles.css
-    │   ├── utils.js
-    │   ├── hooks/useSpeechRecognition.js
-    │   └── components/*.jsx
-    ├── index.html
-    ├── package.json
-    └── vite.config.js
-```
+---
 
-## 1. Crie sua chave gratuita da Groq
+# 🚀 Funcionalidades
 
-1. Acesse https://console.groq.com e crie uma conta (dá pra usar o login do
-   Google, sem cartão de crédito).
-2. Vá em **API Keys** → **Create API Key**.
-3. Copie a chave gerada (começa com `gsk_...`).
+- **🎙️ Transcrição em Tempo Real**  
+  Captura e exibe a fala do professor utilizando a *Web Speech API* nativa do navegador, com suporte otimizado para Português-Brasil (PT-BR).
 
-O plano gratuito da Groq tem um limite generoso de requisições por dia —
-mais do que suficiente para desenvolver e apresentar o trabalho.
+- **🤖 Resumos Automatizados por IA**  
+  Integração com a API da **Groq**, utilizando o modelo de linguagem `llama-3.3-70b-versatile` para análise e processamento inteligente dos textos.
 
-## 2. Backend (Python)
+- **📝 Edição Flexível da Transcrição**  
+  Permite utilizar textos de demonstração ou editar livremente o conteúdo capturado antes de realizar a análise pela inteligência artificial.
+
+- **❓ Gerador Dinâmico de Simulados**  
+  Criação automática de perguntas de múltipla escolha com sistema interativo de feedback visual para respostas corretas e incorretas.
+
+- **♿ Acessibilidade Universal Integrada**  
+  Recursos de acessibilidade como:
+  - Ajuste progressivo do tamanho da fonte (A- / A+)
+  - Modo de alto contraste para usuários com baixa visão
+  - Redução de animações da interface
+
+- **💾 Histórico Local Resiliente**  
+  Armazenamento automático dos últimos resumos gerados utilizando *LocalStorage* do navegador.
+
+---
+
+# 🛠️ Tecnologias Utilizadas
+
+O projeto foi desenvolvido utilizando uma arquitetura **full-stack desacoplada**, dividida em dois ecossistemas integrados.
+
+## Frontend
+
+- **React.js** (com Vite)
+- **CSS3** com variáveis nativas para gerenciamento de temas e contraste
+- **Web Speech API** para reconhecimento de voz em tempo real
+
+## Backend (API)
+
+- **Python 3.11**
+- **FastAPI** para criação das rotas da API
+- **Uvicorn** como servidor ASGI
+- **HTTPX** para comunicação assíncrona com serviços externos
+- **Pydantic** para validação de dados e schemas
+
+---
+
+# 📦 Como Executar o Projeto Localmente
+
+## Pré-requisitos
+
+Antes de iniciar, certifique-se de possuir:
+
+- Node.js instalado (versão 18 ou superior)
+- Python instalado (versão 3.10 ou 3.11)
+- Uma chave de API ativa da [Groq Cloud](https://console.groq.com/)
+
+---
+
+# ⚙️ Configuração do Backend
+
+### 1. Acesse a pasta do backend
 
 ```bash
 cd backend
-python3 -m venv venv
-source venv/bin/activate      # Windows: venv\Scripts\activate
+````
+
+### 2. Instale as dependências Python
+
+```bash
 pip install -r requirements.txt
-cp .env.example .env
 ```
-Abra `.env` e cole sua chave:
+
+### 3. Configure as variáveis de ambiente
+
+Crie um arquivo `.env` na raiz da pasta `backend`:
+
+```env
+GROQ_API_KEY=sua_chave_gsk_aqui
 ```
-GROQ_API_KEY=gsk_...sua_chave_aqui...
-```
-Rode o servidor:
+
+### 4. Inicie o servidor FastAPI
+
 ```bash
 uvicorn main:app --reload --port 8000
 ```
-Deixe rodando em `http://localhost:8000`.
 
-## 3. Frontend (React)
+O backend estará disponível em:
 
-Em outro terminal:
+```
+http://localhost:8000
+```
+
+---
+
+# 💻 Configuração do Frontend
+
+Abra um novo terminal:
+
+### 1. Acesse a pasta frontend
+
 ```bash
 cd frontend
+```
+
+### 2. Instale as dependências
+
+```bash
 npm install
+```
+
+### 3. Execute o projeto React
+
+```bash
 npm run dev
 ```
-Abra `http://localhost:5173`. O Vite já está configurado (`vite.config.js`)
-para encaminhar chamadas `/api/...` para o backend em `localhost:8000`, então
-não precisa mexer em CORS para desenvolver localmente.
 
-## 4. Testar
+O frontend estará disponível em:
 
-1. Na aba **Gravação**, toque em "Usar transcrição de exemplo" (ou grave sua
-   própria fala, no Chrome).
-2. Toque em "Gerar resumo, tópicos e perguntas".
-3. Se o backend estiver rodando com a chave configurada, vai aparecer o selo
-   **"🤖 Gerado por IA real (Groq · Llama 3.3, grátis)"** na aba Resumo.
+```
+http://localhost:5173
+```
 
-## Precisa de internet na apresentação
+---
 
-Diferente de rodar uma IA localmente, essa abordagem depende de internet no
-dia da apresentação (o backend chama a API da Groq pela rede). Se o Wi-Fi da
-sala falhar, o app continua funcionando normalmente, só que no modo simulado
-local — não trava a demonstração, só perde o selo de "IA real".
+# ☁️ Deploy em Produção (Render)
 
-## Publicar para apresentar por um link (opcional)
+A aplicação foi configurada para funcionar na plataforma **Render**, utilizando uma arquitetura integrada onde o backend FastAPI gerencia os endpoints da inteligência artificial e também disponibiliza os arquivos estáticos gerados pelo React.
 
-- **Backend**: hospede gratuitamente em Render ou Fly.io (planos free).
-  Configure a variável de ambiente `GROQ_API_KEY` no painel do serviço
-  (nunca no código).
-- **Frontend**: `npm run build` gera a pasta `dist/`, que pode ser hospedada
-  de graça em Vercel, Netlify ou GitHub Pages. Depois de publicado, troque a
-  chamada `fetch('/api/gerar')` em `src/utils.js` pela URL pública do
-  backend.
+## Configurações do Render
 
-## Importante
-- Nunca coloque a `GROQ_API_KEY` no código do frontend — ela ficaria visível
-  para qualquer pessoa que abrir o site. Por isso ela mora só no backend
-  Python.
-- Speech-to-Text (Web Speech API) funciona bem no Chrome; é limitado ou
-  ausente no Firefox e no Safari. Apresente pelo Chrome.
-- Quer trocar o provedor no futuro (ex.: Google Gemini, que também tem plano
-  gratuito)? Só é preciso mexer no `backend/main.py` — a URL da API, o nome
-  do modelo e o formato da resposta mudam um pouco entre provedores, mas a
-  ideia (mandar a transcrição, pedir JSON de volta) continua a mesma.
+### Root Directory
+
+```
+(deixar vazio)
+```
+
+---
+
+## Build Command
+
+```bash
+cd frontend && npm install && node node_modules/vite/bin/vite.js build && cd .. && pip install -r backend/requirements.txt
+```
+
+---
+
+## Start Command
+
+```bash
+uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+```
+
+---
+
+## Variáveis de Ambiente
+
+Configure no painel do Render:
+
+```env
+PYTHON_VERSION=3.11.8
+
+GROQ_API_KEY=sua_chave_privada_da_groq
+```
+
+---
+
+# 🏗️ Arquitetura do Projeto
+
+```
+assistente-de-aula/
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   └── package.json
+│
+├── backend/
+│   ├── main.py
+│   ├── requirements.txt
+│   └── .env
+│
+└── README.md
+```
+
+---
+
+# 🎯 Objetivos do Projeto
+
+* Aplicar conceitos de Inteligência Artificial em uma aplicação real.
+* Utilizar LLMs para auxiliar no processo de aprendizagem.
+* Criar uma ferramenta educacional acessível.
+* Explorar integração entre frontend, backend e APIs de IA.
+
+---
+
+# 👨‍💻 Autor
+
+Desenvolvido por **Wilker Sampaio** 🚀
+
+```
+```
