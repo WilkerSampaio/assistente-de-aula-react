@@ -135,6 +135,7 @@ export default function App() {
             onGerar={handleGerar}
             gerando={gerando}
             statusMsg={micError || (!recording ? statusMsg : '')}
+            onTextChange={(novoTexto) => setDemoText(novoTexto)} // <-- ADICIONADO AQUI PARA INTEGRAR COM O TEXTAREA
           />
         )}
         {activeTab === 'resumo' && <ResumoTab data={data} />}
