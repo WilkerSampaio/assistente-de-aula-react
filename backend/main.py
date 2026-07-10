@@ -5,6 +5,7 @@ import httpx
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles  # <-- IMPORTANTE
 from pydantic import BaseModel
 
 # Carrega variáveis do .env
@@ -22,7 +23,7 @@ SYSTEM_PROMPT = """Você é um assistente educacional inteligente especializado 
 A partir de uma transcrição de aula em português, gere APENAS um JSON válido (sem markdown, sem texto fora do JSON) no formato:
 
 {
-  "resumo": "resumo claro e objetivo da aula, de 3 a 5 frases",
+  "resumo": "resumo claro e objective da aula, de 3 a 5 frases",
   "ideia_central": "uma única frase explicando o principal tema da aula",
   "topicos": ["tópico 1", "tópico 2", "tópico 3", "tópico 4", "tópico 5"],
   "perguntas": [
@@ -129,6 +130,11 @@ async def gerar(req: GerarRequest):
             detail=str(e)
         )
 
+# ==========================================================================
+# SERVIR FRONTEND REACT JUNTOS NO RENDER
+# ==========================================================================
+# Procura a pasta 'dist' gerada pelo build do Vite do seu frontend
+dist_path = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
 
-# Rodar com:
-# uvicorn main:app --reload --port 8000
+if os.path.exists(dist_path):
+    app.mount("/", StaticFiles(directory=dist_path, html=True), name="static")
